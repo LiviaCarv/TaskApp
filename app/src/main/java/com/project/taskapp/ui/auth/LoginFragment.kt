@@ -37,6 +37,9 @@ class LoginFragment : Fragment() {
         binding.btnRecoverPassword.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_recoverAccountFragment)
         }
+        binding.btnLogin.setOnClickListener {
+            findNavController().navigate(R.id.action_global_homeFragment)
+        }
     }
 
     override fun onDestroyView() {

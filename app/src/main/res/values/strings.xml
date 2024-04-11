@@ -10,4 +10,7 @@
     <string name="create_account">CREATE ACCOUNT</string>
     <string name="send_email">SEND EMAIL</string>
     <string name="provide_email_for_password_recovery">Please provide your email to receive a password recovery email</string>
+    <string name="toDo">To Do</string>
+    <string name="doing">Doing</string>
+    <string name="done">Done</string>
 </resources>
