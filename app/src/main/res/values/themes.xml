@@ -1,10 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.TaskApp" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.TaskApp" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:windowBackground">@color/color_default</item>
-        <item name="colorPrimary">@color/color_default</item>
-        <item name="colorPrimaryVariant">@color/color_default</item>
-        <item name="colorSecondary">@color/white</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+
     </style>
 
     <style name="Theme.TaskApp" parent="Base.Theme.TaskApp" />

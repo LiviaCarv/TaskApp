@@ -4,5 +4,9 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="color_default">#3DAAD5</color>
-    <color name="colorPrimaryVariant">@color/color_default</color>
+<!--    <color name="colorPrimaryVariant">@color/color_default</color>-->
+    <color name="colorPrimary">#004257</color>
+    <color name="colorPrimaryVariant">#89D5F0</color>
+    <color name="colorSecondary">#FFA500</color>
+
 </resources>
