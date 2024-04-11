@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".ui.auth.RegisterFragment">
-
+    tools:context=".ui.auth.RecoverAccountFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,13 +33,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_icon_under_toolbar"
                 android:layout_marginBottom="32dp"
-                android:src="@drawable/ic_add_circle"/>
+                android:src="@drawable/ic_lock_open"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:text="@string/provide_email_for_password_recovery"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layout_input_email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_input_email"
@@ -53,29 +61,13 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_input_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txt_input_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_edit_txt"
-                    android:hint="@string/enter_your_password"
-                    android:inputType="textEmailAddress"
-                    app:backgroundTint="@null" />
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin"
                 android:background="@drawable/bg_button"
-                android:text="@string/create_account"
+                android:text="@string/send_email"
                 android:textColor="@color/color_default"
                 app:backgroundTint="@null" />
 
@@ -87,8 +79,6 @@
                 android:indeterminateTint="@color/white" />
 
         </LinearLayout>
-
-
 
 
     </LinearLayout>

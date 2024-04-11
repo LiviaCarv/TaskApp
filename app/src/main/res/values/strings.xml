@@ -8,4 +8,6 @@
     <string name="create_an_account">Create an Account</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="create_account">CREATE ACCOUNT</string>
+    <string name="send_email">SEND EMAIL</string>
+    <string name="provide_email_for_password_recovery">Please provide your email to receive a password recovery email</string>
 </resources>
