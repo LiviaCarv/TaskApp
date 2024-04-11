@@ -2,6 +2,9 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.TaskApp" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/color_default</item>
+        <item name="colorPrimary">@color/color_default</item>
+        <item name="colorPrimaryVariant">@color/color_default</item>
+        <item name="colorSecondary">@color/white</item>
     </style>
 
     <style name="Theme.TaskApp" parent="Base.Theme.TaskApp" />

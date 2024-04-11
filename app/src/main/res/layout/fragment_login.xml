@@ -90,6 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/default_margin"
+            android:visibility="invisible"
             android:indeterminateTint="@color/white" />
 
 

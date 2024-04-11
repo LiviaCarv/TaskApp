@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="color_default">#3DAAD5</color>
+    <color name="colorPrimaryVariant">@color/color_default</color>
 </resources>
