@@ -13,4 +13,9 @@
     <string name="toDo">To Do</string>
     <string name="doing">Doing</string>
     <string name="done">Done</string>
+    <string name="save">SAVE</string>
+    <string name="insert_task_description">Insert task description</string>
+    <string name="description">Description</string>
+    <string name="status">Status</string>
+    <string name="add_task">Add task</string>
 </resources>
