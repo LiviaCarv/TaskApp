@@ -21,4 +21,11 @@
     <string name="create_account_title">Create Account</string>
     <string name="recover_account_title">Recover Account</string>
     <string name="create_new_task_title">Create New Task</string>
+    <string name="warning">Warning</string>
+    <string name="provide_email">Please, insert your e-mail.</string>
+    <string name="ok">OK</string>
+    <string name="provide_password">Please insert your password.</string>
+    <string name="provide_task_description">Insert task description.</string>
+    <string name="insert_a_valid_email">Insert a valid email.</string>
+    <string name="provide_a_password">Provide a password.</string>
 </resources>

@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txt_input_email"
+                    android:id="@+id/edt_input_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_edit_txt"
@@ -79,7 +79,7 @@
                 android:layout_marginTop="@dimen/default_margin">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txt_input_password"
+                    android:id="@+id/edt_input_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_edit_txt"
