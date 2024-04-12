@@ -18,4 +18,7 @@
     <string name="description">Description</string>
     <string name="status">Status</string>
     <string name="add_task">Add task</string>
+    <string name="create_account_title">Create Account</string>
+    <string name="recover_account_title">Recover Account</string>
+    <string name="create_new_task_title">Create New Task</string>
 </resources>
