@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.project.taskapp.R
+import com.project.taskapp.data.model.Status
+import com.project.taskapp.data.model.Task
 import com.project.taskapp.databinding.FragmentToDoBinding
+import com.project.taskapp.ui.adapter.TaskListAdapter
 
 class ToDoFragment : Fragment() {
     private var _binding: FragmentToDoBinding? = null
@@ -24,11 +27,33 @@ class ToDoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListener()
+        initRecyclerView(getTaskList())
     }
 
     private fun initListener() {
         binding.fabAddTask.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_formTaskFragment)
         }
+    }
+
+    private fun initRecyclerView(taskList: List<Task>) {
+        binding.recyclerTaskList.apply {
+            adapter = TaskListAdapter(taskList)
+            setHasFixedSize(true)
+        }
+    }
+
+    private fun getTaskList() = listOf(
+        Task(id = "1", description = "Teste 1"),
+        Task(id = "2", description = "Teste 2"),
+        Task(id = "3", description = "Teste 3"),
+        Task(id = "4", description = "Teste 4"),
+        Task(id = "5", description = "Teste 5"),
+        Task(id = "6", description = "Teste 6")
+        )
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

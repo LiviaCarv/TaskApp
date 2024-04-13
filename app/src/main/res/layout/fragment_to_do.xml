@@ -6,12 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".ui.ToDoFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_task_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_task" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add_circle"
         android:backgroundTint="@color/white"
+        app:shapeAppearance="@style/Widget.Material3.CircularProgressIndicator"
         app:tint="@color/color_default"
         android:layout_margin="@dimen/default_padding"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -9,5 +9,7 @@
     <color name="colorOnPrimary">#005671</color>
     <color name="colorPrimaryVariant">#89D5F0</color>
     <color name="colorSecondary">#FFA500</color>
+    <color name="color_delete">#FF4C3B</color>
+    <color name="color_details">#04D5C1</color>
 
 </resources>
