@@ -44,7 +44,7 @@ class RecoverAccountFragment : Fragment() {
         if (email.isNotEmpty()) {
                 Toast.makeText(requireContext(), "OK", Toast.LENGTH_SHORT).show()
         } else {
-            showBottomSheet(message = R.string.provide_email)
+            showBottomSheet(message = getString(R.string.provide_email))
         }
     }
     override fun onDestroyView() {

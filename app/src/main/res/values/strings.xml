@@ -1,31 +1,41 @@
 <resources>
     <string name="app_name">TaskApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="enter_your_e_mail">Enter your e-mail</string>
-    <string name="enter_your_password">Enter your password</string>
-    <string name="login">LOGIN</string>
+
+    <!-- Login Fragment -->
+    <string name="login">Login</string>
     <string name="create_an_account">Create an Account</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="create_account">CREATE ACCOUNT</string>
-    <string name="send_email">SEND EMAIL</string>
+
+    <!-- Recover & Register Fragment -->
+    <string name="create_account">Create Account</string>
+    <string name="send_email">Send Email</string>
     <string name="provide_email_for_password_recovery">Please provide your email to receive a password recovery email</string>
+
+    <!-- Home Fragment -->
     <string name="toDo">To Do</string>
     <string name="doing">Doing</string>
     <string name="done">Done</string>
-    <string name="save">SAVE</string>
+
+    <!-- FormTask Fragment -->
+    <string name="save">Save</string>
     <string name="insert_task_description">Insert task description</string>
     <string name="description">Description</string>
     <string name="status">Status</string>
     <string name="add_task">Add task</string>
+    <string name="provide_task_description">Insert task description.</string>
+
+    <!-- Titles -->
     <string name="create_account_title">Create Account</string>
     <string name="recover_account_title">Recover Account</string>
     <string name="create_new_task_title">Create New Task</string>
+
+    <!-- Generic -->
     <string name="warning">Warning</string>
     <string name="provide_email">Please, insert your e-mail.</string>
     <string name="ok">OK</string>
     <string name="provide_password">Please insert your password.</string>
-    <string name="provide_task_description">Insert task description.</string>
     <string name="insert_a_valid_email">Insert a valid email.</string>
     <string name="provide_a_password">Provide a password.</string>
+    <string name="enter_your_e_mail">Enter your e-mail</string>
+    <string name="enter_your_password">Enter your password</string>
 </resources>

@@ -52,11 +52,11 @@ class LoginFragment : Fragment() {
             if (password.isNotEmpty()) {
                 findNavController().navigate(R.id.action_global_homeFragment)
             } else {
-                showBottomSheet(message = R.string.provide_password)
+                showBottomSheet(message = getString(R.string.provide_password))
             }
 
         } else {
-            showBottomSheet(message = R.string.provide_email)
+            showBottomSheet(message = getString(R.string.provide_email))
         }
     }
 

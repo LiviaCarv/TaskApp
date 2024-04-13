@@ -45,11 +45,11 @@ class RegisterFragment : Fragment() {
             if (password.isNotEmpty()) {
                 Toast.makeText(requireContext(), "OK", Toast.LENGTH_SHORT).show()
             } else {
-                showBottomSheet(message = R.string.provide_a_password)
+                showBottomSheet(message = getString(R.string.provide_a_password))
             }
 
         } else {
-            showBottomSheet(message = R.string.insert_a_valid_email)
+            showBottomSheet(message = getString(R.string.insert_a_valid_email))
         }
     }
 

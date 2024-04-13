@@ -17,6 +17,7 @@
         <item name="android:background">@drawable/bg_button</item>
         <item name="android:textColor">@color/color_default</item>
         <item name="backgroundTint">@null</item>
+        <item name="textAllCaps">true</item>
 
     </style>
 
