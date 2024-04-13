@@ -11,5 +11,7 @@
     <color name="colorSecondary">#FFA500</color>
     <color name="color_delete">#FF4C3B</color>
     <color name="color_details">#04D5C1</color>
+    <color name="color_orange">#FF841A</color>
+    <color name="color_green">#04D5C1</color>
 
 </resources>

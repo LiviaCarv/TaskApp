@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.project.taskapp.R
 import com.project.taskapp.data.model.Status
 import com.project.taskapp.data.model.Task
 import com.project.taskapp.databinding.FragmentDoingBinding
@@ -30,8 +32,25 @@ class DoingFragment : Fragment() {
 
     private fun initRecyclerView(taskList: List<Task>) {
         binding.recyclerTaskList.apply {
-            adapter = TaskListAdapter(taskList)
+            adapter = TaskListAdapter(requireContext(),taskList) { taskItem, option ->
+                optionSelected(taskItem, option)
+            }
             setHasFixedSize(true)
+        }
+    }
+
+    private fun optionSelected(task: Task, option: Int) {
+        when (option) {
+            R.id.btn_remove_task -> {
+                Toast.makeText(requireContext(), "removendo task ${task.description}", Toast.LENGTH_SHORT).show()}
+            R.id.btn_edit_task -> {
+                Toast.makeText(requireContext(), "editando task ${task.description}", Toast.LENGTH_SHORT).show()}
+            R.id.btn_task_details -> {
+                Toast.makeText(requireContext(), "details task ${task.description}", Toast.LENGTH_SHORT).show()}
+            R.id.btn_forward -> {
+                Toast.makeText(requireContext(), "forward task ${task.description}", Toast.LENGTH_SHORT).show()}
+            R.id.btn_back -> {
+                Toast.makeText(requireContext(), "back task ${task.description}", Toast.LENGTH_SHORT).show()}
         }
     }
 

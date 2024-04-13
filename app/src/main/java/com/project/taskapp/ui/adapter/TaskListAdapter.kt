@@ -1,16 +1,29 @@
 package com.project.taskapp.ui.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.project.taskapp.R
+import com.project.taskapp.data.model.Status
 import com.project.taskapp.data.model.Task
 import com.project.taskapp.databinding.ItemTaskBinding
 
-class TaskListAdapter(private val taskList: List<Task>): RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
+class TaskListAdapter(
+    private val context: Context,
+    private val taskList: List<Task>,
+    private val onItemClickListener: (Task, Int) -> Unit
+) :
+    RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
 
-    inner class ViewHolder (private val binding: ItemTaskBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemTaskBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(itemTask: Task) {
             binding.txtDescription.text = itemTask.description
+            setArrowIndicators(itemTask, binding)
+            binding.setTaskButtonsListeners(itemTask)
         }
 
     }
@@ -27,5 +40,40 @@ class TaskListAdapter(private val taskList: List<Task>): RecyclerView.Adapter<Ta
         val item = taskList[position]
         holder.bind(item)
     }
+
+    private fun setArrowIndicators(itemTask: Task, binding: ItemTaskBinding) {
+        when (itemTask.status) {
+            Status.TODO -> {
+                binding.apply {
+                    btnBack.isVisible = false
+                    btnForward.setOnClickListener { onItemClickListener(itemTask, R.id.btn_forward) }
+                }
+            }
+
+            Status.DONE -> {
+                binding.apply {
+                    btnForward.isVisible = false
+                    btnBack.setOnClickListener { onItemClickListener(itemTask, R.id.btn_back) }
+                }
+
+            }
+
+            Status.DOING -> {
+                binding.apply {
+                    btnBack.setColorFilter(ContextCompat.getColor(context, R.color.color_orange))
+                    btnForward.setColorFilter(ContextCompat.getColor(context, R.color.color_green))
+                    btnBack.setOnClickListener { onItemClickListener(itemTask, R.id.btn_back) }
+                    btnForward.setOnClickListener { onItemClickListener(itemTask, R.id.btn_forward) }
+                }
+            }
+        }
+    }
+
+    private fun ItemTaskBinding.setTaskButtonsListeners(itemTask: Task) {
+        btnRemoveTask.setOnClickListener { onItemClickListener(itemTask, R.id.btn_remove_task) }
+        btnEditTask.setOnClickListener { onItemClickListener(itemTask, R.id.btn_edit_task) }
+        btnTaskDetails.setOnClickListener { onItemClickListener(itemTask, R.id.btn_task_details) }
+    }
+
 
 }
