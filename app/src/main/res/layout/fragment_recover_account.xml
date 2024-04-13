@@ -73,10 +73,9 @@
                     android:id="@+id/edt_input_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_edit_txt"
+                    style="@style/EditTextTheme"
                     android:hint="@string/enter_your_e_mail"
-                    android:inputType="textEmailAddress"
-                    app:backgroundTint="@null" />
+                    android:inputType="textEmailAddress" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -86,10 +85,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin"
-                android:background="@drawable/bg_button"
-                android:text="@string/send_email"
-                android:textColor="@color/color_default"
-                app:backgroundTint="@null" />
+                style="@style/ButtonTheme"
+                android:text="@string/send_email" />
 
             <ProgressBar
                 android:layout_width="wrap_content"

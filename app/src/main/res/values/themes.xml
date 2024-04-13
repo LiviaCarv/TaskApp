@@ -8,6 +8,18 @@
 
     </style>
 
+    <style name="EditTextTheme" parent="Theme.Material3.Light.NoActionBar" >
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/bg_edit_txt</item>
+    </style>
+
+    <style name="ButtonTheme" parent="Theme.Material3.Light.NoActionBar" >
+        <item name="android:background">@drawable/bg_button</item>
+        <item name="android:textColor">@color/color_default</item>
+        <item name="backgroundTint">@null</item>
+
+    </style>
+
     <style name="CustomTabLayout" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>

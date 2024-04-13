@@ -45,10 +45,9 @@
                 android:id="@+id/edt_input_task_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_edit_txt"
+                style="@style/EditTextTheme"
                 android:hint="@string/insert_task_description"
-                android:inputType="text"
-                app:backgroundTint="@null" />
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,10 +91,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_margin"
-            android:background="@drawable/bg_button"
-            android:text="@string/save"
-            android:textColor="@color/color_default"
-            app:backgroundTint="@null" />
+            style="@style/ButtonTheme"
+            android:text="@string/save" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
