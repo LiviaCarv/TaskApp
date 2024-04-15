@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.project.taskapp.R
 import com.project.taskapp.data.model.Status
@@ -13,10 +15,9 @@ import com.project.taskapp.databinding.ItemTaskBinding
 
 class TaskListAdapter(
     private val context: Context,
-    private val taskList: List<Task>,
     private val onItemClickListener: (Task, Int) -> Unit
 ) :
-    RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
+    ListAdapter<Task, TaskListAdapter.ViewHolder>(TaskDiffCallback()) {
 
     inner class ViewHolder(private val binding: ItemTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -34,10 +35,10 @@ class TaskListAdapter(
         return ViewHolder(binding)
     }
 
-    override fun getItemCount() = taskList.size
+//    override fun getItemCount() = taskList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = taskList[position]
+        val item = getItem(position)
         holder.bind(item)
     }
 
@@ -75,5 +76,16 @@ class TaskListAdapter(
         btnTaskDetails.setOnClickListener { onItemClickListener(itemTask, R.id.btn_task_details) }
     }
 
+
+}
+
+class TaskDiffCallback: DiffUtil.ItemCallback<Task>() {
+    override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+        return oldItem.id == newItem.id &&  oldItem.description == newItem.description
+    }
 
 }

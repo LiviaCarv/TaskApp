@@ -16,6 +16,8 @@ import com.project.taskapp.ui.adapter.TaskListAdapter
 class ToDoFragment : Fragment() {
     private var _binding: FragmentToDoBinding? = null
     private val binding get() = _binding!!
+    private lateinit var taskListAdapter: TaskListAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,7 +30,8 @@ class ToDoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListener()
-        initRecyclerView(getTaskList())
+        initRecyclerView()
+        getTaskList()
     }
 
     private fun initListener() {
@@ -37,11 +40,13 @@ class ToDoFragment : Fragment() {
         }
     }
 
-    private fun initRecyclerView(taskList: List<Task>) {
+    private fun initRecyclerView() {
+
+        taskListAdapter = TaskListAdapter( requireContext()) { taskItem, option ->
+            optionSelected(taskItem, option)
+        }
         binding.recyclerTaskList.apply {
-            adapter = TaskListAdapter( requireContext(), taskList) { taskItem, option ->
-                optionSelected(taskItem, option)
-            }
+            adapter = taskListAdapter
             setHasFixedSize(true)
         }
     }
@@ -55,14 +60,17 @@ class ToDoFragment : Fragment() {
         }
     }
 
-    private fun getTaskList() = listOf(
-        Task(id = "1", description = "Teste 1"),
-        Task(id = "2", description = "Teste 2"),
-        Task(id = "3", description = "Teste 3"),
-        Task(id = "4", description = "Teste 4"),
-        Task(id = "5", description = "Teste 5"),
-        Task(id = "6", description = "Teste 6")
+    private fun getTaskList() {
+        val taskList = listOf(
+            Task(id = "1", description = "Teste 1"),
+            Task(id = "2", description = "Teste 2"),
+            Task(id = "3", description = "Teste 3"),
+            Task(id = "4", description = "Teste 4"),
+            Task(id = "5", description = "Teste 5"),
+            Task(id = "6", description = "Teste 6")
         )
+        taskListAdapter.submitList(taskList)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
