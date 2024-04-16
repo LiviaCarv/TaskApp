@@ -54,8 +54,11 @@ dependencies {
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
 
-    // Add the dependency for the Firebase Authentication library
+    // Import the Firebase Authentication library
     implementation("com.google.firebase:firebase-auth")
+
+    // Import the Realtime Database library
+    implementation("com.google.firebase:firebase-database")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
