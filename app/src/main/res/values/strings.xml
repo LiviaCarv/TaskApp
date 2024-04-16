@@ -29,6 +29,11 @@
     <string name="recover_account_title">Recover Account</string>
     <string name="create_new_task_title">Create New Task</string>
 
+    <!-- Home Fragment -->
+    <string name="title_dialog_confirm_logout">Do you want to sign out of your account?</string>
+    <string name="title_button_logout">Confirm</string>
+    <string name="text_message_logout">Please confirm if you want to sign out.</string>
+
     <!-- Generic -->
     <string name="warning">Warning</string>
     <string name="provide_email">Please, insert your e-mail.</string>
@@ -41,4 +46,5 @@
     <string name="remove">Remove</string>
     <string name="edit">Edit</string>
     <string name="details">Details</string>
+
 </resources>
