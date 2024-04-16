@@ -6,6 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.project.taskapp.R
 import com.project.taskapp.databinding.FragmentRecoverAccountBinding
 import com.project.taskapp.databinding.FragmentRegisterBinding
@@ -17,6 +21,7 @@ class RecoverAccountFragment : Fragment() {
 
     private var _binding: FragmentRecoverAccountBinding? = null
     private val binding get() = _binding!!
+    private lateinit var auth: FirebaseAuth
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,6 +32,7 @@ class RecoverAccountFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        auth = Firebase.auth
         initToolBar(binding.toolbar)
         initListener()
 
@@ -42,10 +48,28 @@ class RecoverAccountFragment : Fragment() {
         val email: String = binding.edtInputEmail.text.toString()
 
         if (email.isNotEmpty()) {
-                Toast.makeText(requireContext(), "OK", Toast.LENGTH_SHORT).show()
+            binding.progressBar.isVisible = true
+            recoverUserAccount(email)
         } else {
             showBottomSheet(message = getString(R.string.provide_email))
         }
+    }
+
+    private fun recoverUserAccount(email: String) {
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener {task ->
+                binding.progressBar.isVisible = false
+                if (task.isSuccessful) {
+                  showBottomSheet(message = getString(R.string.text_message_recover_fragment))
+
+                } else{
+                    Toast.makeText(
+                        requireContext(),
+                        "Authentication failed: ${task.exception?.message}.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
     }
     override fun onDestroyView() {
         super.onDestroyView()

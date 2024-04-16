@@ -46,5 +46,6 @@
     <string name="remove">Remove</string>
     <string name="edit">Edit</string>
     <string name="details">Details</string>
+    <string name="text_message_recover_fragment">Done, we\'ve sent you an email with information to recover your account.</string>
 
 </resources>
