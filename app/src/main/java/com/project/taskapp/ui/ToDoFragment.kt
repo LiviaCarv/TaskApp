@@ -1,12 +1,22 @@
 package com.project.taskapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.project.taskapp.R
 import com.project.taskapp.data.model.Status
 import com.project.taskapp.data.model.Task
@@ -17,6 +27,8 @@ class ToDoFragment : Fragment() {
     private var _binding: FragmentToDoBinding? = null
     private val binding get() = _binding!!
     private lateinit var taskListAdapter: TaskListAdapter
+    private lateinit var auth: FirebaseAuth
+    private lateinit var reference: DatabaseReference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,9 +41,12 @@ class ToDoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        reference = Firebase.database.reference
+        auth = Firebase.auth
+
         initListener()
-        initRecyclerView()
         getTaskList()
+        initRecyclerView()
     }
 
     private fun initListener() {
@@ -61,16 +76,36 @@ class ToDoFragment : Fragment() {
     }
 
     private fun getTaskList() {
-        val taskList = listOf(
-            Task(id = "1", description = "Teste 1"),
-            Task(id = "2", description = "Teste 2"),
-            Task(id = "3", description = "Teste 3"),
-            Task(id = "4", description = "Teste 4"),
-            Task(id = "5", description = "Teste 5"),
-            Task(id = "6", description = "Teste 6")
-        )
-        taskListAdapter.submitList(taskList)
+        Log.i("TESTE", "getTaskList() chamado")
+        reference
+            .child("tasks")
+            .child(auth.currentUser?.uid  ?: "")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.i("TESTE", "onDataChange() chamado")
+
+                    val taskList = mutableListOf<Task>()
+                    for (ds in snapshot.children) {
+                        Log.i("TESTE", "ds In Snapshot: (${ds.value})")
+                        val taskMap = ds.value as? Map<*, *> ?: continue
+                        val id = taskMap["id"] as? String ?: ""
+                        val description = taskMap["description"] as? String ?: ""
+                        val statusString = taskMap["status"] as? String ?: ""
+                        val status = Status.valueOf(statusString)
+                        val task = Task(id, description, status)
+                        taskList.add(task)
+                    }
+                    Log.i("TESTE", "taskList size = ${taskList.size} adicionado ao taskList Adapter")
+                    taskListAdapter.submitList(taskList)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+
+                }
+            })
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

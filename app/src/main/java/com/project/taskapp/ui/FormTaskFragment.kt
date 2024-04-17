@@ -27,6 +27,7 @@ class FormTaskFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var task: Task
     private var newTask: Boolean = true
+    private var status: Status = Status.TODO
     private lateinit var reference: DatabaseReference
 
     override fun onCreateView(
@@ -52,7 +53,7 @@ class FormTaskFragment : Fragment() {
             validateData()
         }
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            task.status = when (checkedId) {
+            status = when (checkedId) {
                 R.id.radio_opt_todo -> Status.TODO
                 R.id.radio_opt_doing -> Status.DOING
                 else -> Status.DONE
@@ -65,8 +66,9 @@ class FormTaskFragment : Fragment() {
         if (description.isNotEmpty()) {
             binding.progressBar.isVisible = true
            if (newTask) task = Task(description = description)
-            val id = reference.database.reference.push().key
+            val id: String? = reference.database.reference.push().key
             task.id = id ?: ""
+            task.status = status
             saveTask()
         } else {
             showBottomSheet(message = getString(R.string.provide_task_description))
@@ -80,8 +82,8 @@ class FormTaskFragment : Fragment() {
             .child(auth.currentUser?.uid  ?: "")
             .child(task.id)
             .setValue(task)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
+            .addOnCompleteListener { result ->
+                if (result.isSuccessful) {
                     Toast.makeText(requireContext(), "Task saved successfully.", Toast.LENGTH_SHORT).show()
                     if (newTask) {
                         findNavController().popBackStack()
