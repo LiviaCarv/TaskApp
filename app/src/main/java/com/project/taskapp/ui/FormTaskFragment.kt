@@ -79,7 +79,7 @@ class FormTaskFragment : Fragment() {
     private fun saveTask() {
         reference
             .child("tasks")
-            .child(auth.currentUser?.uid  ?: "")
+            .child(auth.currentUser!!.uid)
             .child(task.id)
             .setValue(task)
             .addOnCompleteListener { result ->

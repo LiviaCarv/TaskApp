@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
             showBottomSheet(
                 message = getString(R.string.text_message_logout),
                 titleDialog = R.string.title_dialog_confirm_logout,
-                titleButton = R.string.title_button_logout,
+                titleButton = R.string.title_button_confirm,
                 onClick = {
                     auth.signOut()
                     findNavController().navigate(R.id.action_homeFragment_to_authentication)

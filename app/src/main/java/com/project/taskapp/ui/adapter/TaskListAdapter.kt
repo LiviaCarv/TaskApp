@@ -1,6 +1,7 @@
 package com.project.taskapp.ui.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -22,6 +23,7 @@ class TaskListAdapter(
     inner class ViewHolder(private val binding: ItemTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(itemTask: Task) {
+            Log.i("TESTE", "BIND CHAMADO")
             binding.txtDescription.text = itemTask.description
             setArrowIndicators(itemTask, binding)
             binding.setTaskButtonsListeners(itemTask)
@@ -30,6 +32,7 @@ class TaskListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        Log.i("TESTE", "onCreateViewHolder CHAMADO")
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemTaskBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
@@ -38,6 +41,8 @@ class TaskListAdapter(
 //    override fun getItemCount() = taskList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.i("TESTE", "onBindViewHolder CHAMADO")
+
         val item = getItem(position)
         holder.bind(item)
     }
