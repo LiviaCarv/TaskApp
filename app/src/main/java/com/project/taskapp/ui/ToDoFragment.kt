@@ -51,7 +51,7 @@ class ToDoFragment : Fragment() {
 
     private fun initListener() {
         binding.fabAddTask.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_formTaskFragment)
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToFormTaskFragment(null))
         }
     }
 
@@ -75,7 +75,10 @@ class ToDoFragment : Fragment() {
                 onClick = {
                     deleteTask(task)
                 })
-            R.id.btn_edit_task -> {Toast.makeText(requireContext(), "editando task ${task.description}", Toast.LENGTH_SHORT).show()}
+            R.id.btn_edit_task -> {
+                val action = HomeFragmentDirections.actionHomeFragmentToFormTaskFragment(task)
+                findNavController().navigate(action)
+            }
             R.id.btn_task_details -> {Toast.makeText(requireContext(), "details task ${task.description}", Toast.LENGTH_SHORT).show()}
             R.id.btn_forward -> {Toast.makeText(requireContext(), "forward task ${task.description}", Toast.LENGTH_SHORT).show()}
         }
