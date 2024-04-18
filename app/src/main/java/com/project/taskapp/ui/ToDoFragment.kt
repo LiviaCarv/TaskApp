@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -15,7 +16,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.project.taskapp.R
 import com.project.taskapp.data.model.Status
@@ -30,6 +30,7 @@ class ToDoFragment : Fragment() {
     private lateinit var taskListAdapter: TaskListAdapter
     private lateinit var auth: FirebaseAuth
     private lateinit var reference: DatabaseReference
+    private val viewModel: TaskViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,11 +49,31 @@ class ToDoFragment : Fragment() {
         initListener()
         initRecyclerView()
         getTaskList()
+
     }
+
 
     private fun initListener() {
         binding.fabAddTask.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToFormTaskFragment(null))
+        }
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.taskUpdate.observe(viewLifecycleOwner) { updatedTask ->
+            if (updatedTask.status == Status.TODO) {
+                val oldList = taskListAdapter.currentList
+
+                val newList = oldList.toMutableList().apply {
+                    find { it.id == updatedTask.id }?.description = updatedTask.description
+                }
+
+                val position = newList.indexOfFirst { it.id == updatedTask.id }
+
+                taskListAdapter.submitList(newList)
+                taskListAdapter.notifyItemChanged(position)
+            }
         }
     }
 
@@ -97,7 +118,7 @@ class ToDoFragment : Fragment() {
                         taskList.add(task)
                     }
                 }
-
+                listEmpty(taskList)
                 taskList.reverse()
                 taskListAdapter.submitList(taskList)
             }

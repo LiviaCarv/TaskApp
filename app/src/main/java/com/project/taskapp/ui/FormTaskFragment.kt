@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
@@ -31,6 +32,7 @@ class FormTaskFragment : Fragment() {
     private var status: Status = Status.TODO
     private lateinit var reference: DatabaseReference
     private val args: FormTaskFragmentArgs by navArgs()
+    private val viewModel: TaskViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -122,6 +124,9 @@ class FormTaskFragment : Fragment() {
                         getString(R.string.task_saved_successfully), Toast.LENGTH_SHORT).show()
 
                     findNavController().popBackStack()
+                    if (!newTask) {
+                        viewModel.setUpdatedTask(task)
+                    }
 
                 } else {
                     showBottomSheet(message = getString(R.string.error_task_creation_message))
