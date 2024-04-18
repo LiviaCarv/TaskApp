@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.project.taskapp.R
 import com.project.taskapp.data.model.Status
@@ -85,40 +86,26 @@ class ToDoFragment : Fragment() {
     }
 
     private fun getTaskList() {
-        Log.i("TESTE", "getTaskList() chamado")
-        reference
-            .child("tasks")
-            .child(auth.currentUser?.uid  ?: "")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.i("TESTE", "onDataChange() chamado")
-                    val taskList = mutableListOf<Task>()
-                    for (ds in snapshot.children) {
-                        Log.i("TESTE", "ds In Snapshot: (${ds.value})")
-                        val taskMap = ds.value as? Map<*, *> ?: continue
-                        val id = taskMap["id"] as? String ?: ""
-                        val description = taskMap["description"] as? String ?: ""
-                        val statusString = taskMap["status"] as? String ?: ""
-                        val status = Status.valueOf(statusString)
-                        val task = Task(id, description, status)
+        val dbCurrentUser = reference.child("tasks").child(auth.currentUser!!.uid)
 
-                        if (task.status == Status.TODO) {
-                            taskList.add(task)
-                        }
+        dbCurrentUser.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val taskList = mutableListOf<Task>()
+                for (ds in snapshot.children) {
+                    val task = ds.getValue(Task::class.java) as Task
+                    if (task.status == Status.TODO) {
+                        taskList.add(task)
                     }
-
-                    taskList.reverse()
-                    listEmpty(taskList)
-                    taskListAdapter.submitList(taskList)
-                    Log.i("TESTE", "taskList size = ${taskList.size} adicionado ao taskList Adapter")
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(requireContext(),
-                        getString(R.string.error_generic), Toast.LENGTH_SHORT).show()
+                taskList.reverse()
+                taskListAdapter.submitList(taskList)
+            }
 
-                }
-            })
+            override fun onCancelled(error: DatabaseError) {
+                Log.i("INFOTESTE", "onCancelled:")
+            }
+        })
     }
 
     private fun deleteTask(task: Task) {

@@ -10,5 +10,5 @@ import kotlinx.parcelize.Parcelize
 data class Task(
     var id: String = "",
     var description: String = "",
-    var status: Enum<Status> = Status.TODO
+    var status: Status = Status.TODO
 ) : Parcelable
