@@ -59,7 +59,7 @@
     <string name="error_task_creation_message">Error occurred. Task creation failed.</string>
     <string name="text_task_list_empty">There are no tasks registered.</string>
     <string name="text_task_list_load">Please wait, we are loading your information.</string>
-    <string name="error_generic">Error</string>
+    <string name="error_generic">An error occurred! Please try again later.</string>
     <string name="task_deleted_successfully">Task deleted successfully.</string>
     <string name="title_button_confirm">Confirm</string>
     <string name="toolbar_editing_task">Editing task</string>

@@ -19,7 +19,7 @@ import com.project.taskapp.util.initToolBar
 import com.project.taskapp.util.showBottomSheet
 
 
-class FormTaskFragment : Fragment() {
+class FormTaskFragment : BaseFragment() {
     private var _binding: FragmentFormTaskBinding? = null
     private val binding get() = _binding!!
     private lateinit var task: Task
@@ -88,6 +88,7 @@ class FormTaskFragment : Fragment() {
     private fun validateData() {
         val description: String = binding.edtInputTaskDescription.text.toString()
         if (description.isNotEmpty()) {
+            hideKeyboard()
             binding.progressBar.isVisible = true
             if (newTask) task = Task()
             task.description = description
@@ -106,6 +107,7 @@ class FormTaskFragment : Fragment() {
             .child(task.id)
             .setValue(task)
             .addOnCompleteListener { result ->
+                binding.progressBar.isVisible = false
                 if (result.isSuccessful) {
                     Toast.makeText(
                         requireContext(),

@@ -14,12 +14,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.project.taskapp.R
 import com.project.taskapp.databinding.FragmentRegisterBinding
+import com.project.taskapp.ui.BaseFragment
 import com.project.taskapp.util.FirebaseHelper
 import com.project.taskapp.util.initToolBar
 import com.project.taskapp.util.showBottomSheet
 
 
-class RegisterFragment : Fragment() {
+class RegisterFragment : BaseFragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
@@ -52,6 +53,7 @@ class RegisterFragment : Fragment() {
 
         if (email.isNotEmpty()) {
             if (password.isNotEmpty()) {
+                hideKeyboard()
                 binding.progressBar.isVisible = true
                 registerUser(email, password)
 

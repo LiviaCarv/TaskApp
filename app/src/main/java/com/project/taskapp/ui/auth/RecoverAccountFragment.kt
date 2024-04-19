@@ -13,12 +13,13 @@ import com.google.firebase.ktx.Firebase
 import com.project.taskapp.R
 import com.project.taskapp.databinding.FragmentRecoverAccountBinding
 import com.project.taskapp.databinding.FragmentRegisterBinding
+import com.project.taskapp.ui.BaseFragment
 import com.project.taskapp.util.FirebaseHelper
 import com.project.taskapp.util.initToolBar
 import com.project.taskapp.util.showBottomSheet
 
 
-class RecoverAccountFragment : Fragment() {
+class RecoverAccountFragment : BaseFragment() {
 
     private var _binding: FragmentRecoverAccountBinding? = null
     private val binding get() = _binding!!
@@ -48,6 +49,7 @@ class RecoverAccountFragment : Fragment() {
         val email: String = binding.edtInputEmail.text.toString()
 
         if (email.isNotEmpty()) {
+            hideKeyboard()
             binding.progressBar.isVisible = true
             recoverUserAccount(email)
         } else {
