@@ -1,18 +1,15 @@
 package com.project.taskapp.ui.auth
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.project.taskapp.R
 import com.project.taskapp.databinding.FragmentLoginBinding
+import com.project.taskapp.util.FirebaseHelper
 import com.project.taskapp.util.showBottomSheet
 
 
@@ -20,7 +17,6 @@ class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var auth: FirebaseAuth
 
 
     override fun onCreateView(
@@ -33,7 +29,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        auth = Firebase.auth
+
         initListener()
     }
 
@@ -69,19 +65,16 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginUser(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password)
+        FirebaseHelper.getAuth().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    val user = auth.currentUser
+                    val user = FirebaseHelper.getUser()
                     findNavController().navigate(R.id.action_global_homeFragment)
                 } else {
                     // If sign in fails, display a message to the user.
-                    Toast.makeText(
-                        requireContext(),
-                        "Authentication failed: ${task.exception?.message}",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    showBottomSheet(message = getString(FirebaseHelper.validError(task.exception?.message.toString())))
+
                     binding.progressBar.isVisible = false
 
                 }

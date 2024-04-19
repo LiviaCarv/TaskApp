@@ -10,15 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.project.taskapp.R
 import com.project.taskapp.data.model.Status
 import com.project.taskapp.data.model.Task
 import com.project.taskapp.databinding.FragmentFormTaskBinding
+import com.project.taskapp.util.FirebaseHelper
 import com.project.taskapp.util.initToolBar
 import com.project.taskapp.util.showBottomSheet
 
@@ -26,11 +22,10 @@ import com.project.taskapp.util.showBottomSheet
 class FormTaskFragment : Fragment() {
     private var _binding: FragmentFormTaskBinding? = null
     private val binding get() = _binding!!
-    private lateinit var auth: FirebaseAuth
     private lateinit var task: Task
     private var newTask: Boolean = true
     private var status: Status = Status.TODO
-    private lateinit var reference: DatabaseReference
+
     private val args: FormTaskFragmentArgs by navArgs()
     private val viewModel: TaskViewModel by activityViewModels()
 
@@ -45,15 +40,12 @@ class FormTaskFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        reference = Firebase.database.reference
-        auth = Firebase.auth
-
         getArgs()
         initListener()
         initToolBar(binding.toolbar)
     }
 
-        private fun getArgs() {
+    private fun getArgs() {
         args.task.let {
             if (it != null) {
                 task = it
@@ -74,11 +66,10 @@ class FormTaskFragment : Fragment() {
         val id = when (task.status) {
             Status.TODO -> R.id.radio_opt_todo
             Status.DOING -> R.id.radio_opt_doing
-            else-> R.id.radio_opt_done
+            else -> R.id.radio_opt_done
         }
         binding.radioGroup.check(id)
     }
-
 
 
     private fun initListener() {
@@ -98,11 +89,7 @@ class FormTaskFragment : Fragment() {
         val description: String = binding.edtInputTaskDescription.text.toString()
         if (description.isNotEmpty()) {
             binding.progressBar.isVisible = true
-            if (newTask) {
-                task = Task()
-                val id: String? = reference.database.reference.push().key
-                task.id = id ?: ""
-            }
+            if (newTask) task = Task()
             task.description = description
             task.status = status
             saveTask()
@@ -113,15 +100,17 @@ class FormTaskFragment : Fragment() {
     }
 
     private fun saveTask() {
-        reference
+        FirebaseHelper.getDatabase()
             .child("tasks")
-            .child(auth.currentUser!!.uid)
+            .child(FirebaseHelper.getUserId())
             .child(task.id)
             .setValue(task)
             .addOnCompleteListener { result ->
                 if (result.isSuccessful) {
-                    Toast.makeText(requireContext(),
-                        getString(R.string.task_saved_successfully), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.task_saved_successfully), Toast.LENGTH_SHORT
+                    ).show()
 
                     findNavController().popBackStack()
                     if (!newTask) {

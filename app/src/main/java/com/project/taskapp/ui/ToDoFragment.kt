@@ -22,14 +22,14 @@ import com.project.taskapp.data.model.Status
 import com.project.taskapp.data.model.Task
 import com.project.taskapp.databinding.FragmentToDoBinding
 import com.project.taskapp.ui.adapter.TaskListAdapter
+import com.project.taskapp.util.FirebaseHelper
 import com.project.taskapp.util.showBottomSheet
 
 class ToDoFragment : Fragment() {
     private var _binding: FragmentToDoBinding? = null
     private val binding get() = _binding!!
     private lateinit var taskListAdapter: TaskListAdapter
-    private lateinit var auth: FirebaseAuth
-    private lateinit var reference: DatabaseReference
+
     private val viewModel: TaskViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -43,8 +43,6 @@ class ToDoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        reference = Firebase.database.reference
-        auth = Firebase.auth
 
         initListener()
         initRecyclerView()
@@ -107,7 +105,7 @@ class ToDoFragment : Fragment() {
     }
 
     private fun getTaskList() {
-        val dbCurrentUser = reference.child("tasks").child(auth.currentUser!!.uid)
+        val dbCurrentUser = FirebaseHelper.getDatabase().child("tasks").child(FirebaseHelper.getAuth().currentUser!!.uid)
 
         dbCurrentUser.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -130,9 +128,9 @@ class ToDoFragment : Fragment() {
     }
 
     private fun deleteTask(task: Task) {
-        reference
+        FirebaseHelper.getDatabase()
             .child("tasks")
-            .child(auth.currentUser?.uid  ?: "")
+            .child(FirebaseHelper.getUserId())
             .child(task.id)
             .removeValue().addOnCompleteListener { result ->
                 if (result.isSuccessful) {

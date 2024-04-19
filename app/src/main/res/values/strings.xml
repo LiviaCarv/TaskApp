@@ -40,7 +40,7 @@
     <string name="auth_invalid_email">The e-mail address is incorrectly formatted.</string>
     <string name="auth_invalid_password">The given password is invalid. Try again.</string>
     <string name="auth_email_already_registered">This e-mail is already registered.</string>
-    <string name="auth_require_stronger_password">Please confirm if you want to delete it.</string>
+    <string name="auth_require_stronger_password">Please provide a stronger password.</string>
 
 
     <!-- Generic -->
