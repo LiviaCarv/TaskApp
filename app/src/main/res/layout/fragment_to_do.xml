@@ -9,9 +9,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_task_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,8 +33,7 @@
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminateTint="@color/white"
-            android:visibility="invisible"/>
+            android:indeterminateTint="@color/white" />
 
         <TextView
             android:id="@+id/txt_info"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:layout_marginTop="@dimen/smaller_margin"
-            tools:text="@string/text_task_list_load" />
+            android:text="@string/text_task_list_load" />
     </LinearLayout>
 
 

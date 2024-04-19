@@ -20,8 +20,7 @@ import com.project.taskapp.util.showBottomSheet
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewPager: ViewPager2
-    private lateinit var viewPagerAdapter: ViewPagerAdapter
+
     private lateinit var auth: FirebaseAuth
 
 
@@ -55,9 +54,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun initTabLayout() {
-        viewPagerAdapter = ViewPagerAdapter(requireActivity())
-        viewPager = binding.viewPager
-        viewPager.adapter = viewPagerAdapter
+        val viewPagerAdapter = ViewPagerAdapter(requireActivity())
+        binding.viewPager.adapter = viewPagerAdapter
 
         viewPagerAdapter.addFragment(ToDoFragment(), R.string.toDo)
         viewPagerAdapter.addFragment(DoingFragment(), R.string.doing)
@@ -69,6 +67,11 @@ class HomeFragment : Fragment() {
             tab.text = getString(viewPagerAdapter.getTitle(position))
         }.attach()
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -29,7 +30,6 @@ class ToDoFragment : Fragment() {
     private var _binding: FragmentToDoBinding? = null
     private val binding get() = _binding!!
     private lateinit var taskListAdapter: TaskListAdapter
-
     private val viewModel: TaskViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -100,8 +100,24 @@ class ToDoFragment : Fragment() {
                 findNavController().navigate(action)
             }
             R.id.btn_task_details -> {Toast.makeText(requireContext(), "details task ${task.description}", Toast.LENGTH_SHORT).show()}
-            R.id.btn_forward -> {Toast.makeText(requireContext(), "forward task ${task.description}", Toast.LENGTH_SHORT).show()}
+            R.id.btn_forward -> {
+                task.status = Status.DOING
+            updateTaskStatus(task)}
         }
+    }
+
+    private fun updateTaskStatus(task: Task) {
+        FirebaseHelper.getDatabase()
+            .child("tasks")
+            .child(FirebaseHelper.getUserId())
+            .child(task.id)
+            .setValue(task).addOnCompleteListener { result ->
+                if (result.isSuccessful) {
+                    Toast.makeText(requireContext(), getString(R.string.task_saved_successfully), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), getString(R.string.error_generic), Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 
     private fun getTaskList() {
@@ -116,6 +132,7 @@ class ToDoFragment : Fragment() {
                         taskList.add(task)
                     }
                 }
+                binding.progressBar.isVisible = false
                 listEmpty(taskList)
                 taskList.reverse()
                 taskListAdapter.submitList(taskList)
@@ -125,6 +142,14 @@ class ToDoFragment : Fragment() {
                 Log.i("INFOTESTE", "onCancelled:")
             }
         })
+    }
+
+    private fun listEmpty(taskList: List<Task>) {
+        binding.txtInfo.text = if (taskList.isEmpty()) {
+            getString(R.string.text_task_list_empty)
+        } else  {
+            ""
+        }
     }
 
     private fun deleteTask(task: Task) {
@@ -140,14 +165,6 @@ class ToDoFragment : Fragment() {
                 }
             }
 
-    }
-
-    private fun listEmpty(taskList: List<Task>) {
-        binding.txtInfo.text = if (taskList.isEmpty()) {
-            getString(R.string.text_task_list_empty)
-        } else  {
-            ""
-        }
     }
     override fun onDestroyView() {
         super.onDestroyView()
