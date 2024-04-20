@@ -2,7 +2,6 @@ package com.project.taskapp.data.model
 
 import android.os.Parcelable
 import com.google.firebase.database.IgnoreExtraProperties
-import com.google.firebase.database.PropertyName
 import com.project.taskapp.util.FirebaseHelper
 import kotlinx.parcelize.Parcelize
 
@@ -16,4 +15,5 @@ data class Task(
     init {
         this.id = FirebaseHelper.getDatabase().push().key ?: ""
     }
+
 }

@@ -56,7 +56,7 @@ class FormTaskFragment : BaseFragment() {
 
     private fun configTask() {
         newTask = false
-        status = task.status as Status
+        status = task.status
         binding.toolbarTitle.text = getString(R.string.toolbar_editing_task)
         binding.edtInputTaskDescription.setText(task.description)
         setStatus()
@@ -74,6 +74,7 @@ class FormTaskFragment : BaseFragment() {
 
     private fun initListener() {
         binding.btnSaveTask.setOnClickListener {
+            observeViewModel()
             validateData()
         }
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -93,37 +94,33 @@ class FormTaskFragment : BaseFragment() {
             if (newTask) task = Task()
             task.description = description
             task.status = status
-            saveTask()
+            if (newTask) {
+                viewModel.saveTask(task)
+            } else {
+                viewModel.updateTask(task)
+            }
         } else {
             showBottomSheet(message = getString(R.string.provide_task_description))
         }
 
     }
+    private fun observeViewModel() {
+        viewModel.taskUpdate.observe(viewLifecycleOwner) { _ ->
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.task_updated_successfully), Toast.LENGTH_SHORT
+            ).show()
+            binding.progressBar.isVisible = false
+        }
 
-    private fun saveTask() {
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getUserId())
-            .child(task.id)
-            .setValue(task)
-            .addOnCompleteListener { result ->
-                binding.progressBar.isVisible = false
-                if (result.isSuccessful) {
-                    Toast.makeText(
+
+        viewModel.taskInsert.observe(viewLifecycleOwner) { _ ->
+            Toast.makeText(
                         requireContext(),
                         getString(R.string.task_saved_successfully), Toast.LENGTH_SHORT
                     ).show()
-
-                    findNavController().popBackStack()
-                    if (!newTask) {
-                        viewModel.setUpdatedTask(task)
-                    }
-
-                } else {
-                    showBottomSheet(message = getString(R.string.error_task_creation_message))
-                }
-            }
-        binding.progressBar.isVisible = false
+            findNavController().popBackStack()
+        }
 
     }
 

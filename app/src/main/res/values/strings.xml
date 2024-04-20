@@ -65,6 +65,7 @@
     <string name="toolbar_editing_task">Editing task</string>
     <string name="task_saved_successfully">Task saved successfully.</string>
     <string name="task_modified_successfully">Task modified successfully.</string>
+    <string name="task_updated_successfully">Task updated successfully.</string>
 
 
 </resources>
