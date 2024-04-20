@@ -1,7 +1,6 @@
 package com.project.taskapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,20 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.project.taskapp.R
 import com.project.taskapp.data.model.Status
 import com.project.taskapp.data.model.Task
 import com.project.taskapp.databinding.FragmentToDoBinding
 import com.project.taskapp.ui.adapter.TaskListAdapter
-import com.project.taskapp.util.FirebaseHelper
+import com.project.taskapp.util.StateView
 import com.project.taskapp.util.showBottomSheet
 
 class ToDoFragment : Fragment() {
@@ -48,10 +39,9 @@ class ToDoFragment : Fragment() {
         initListener()
         initRecyclerView()
         observeViewModel()
-        viewModel.getTaskList(Status.TODO)
+        viewModel.getTaskList()
 
     }
-
 
     private fun initListener() {
         binding.fabAddTask.setOnClickListener {
@@ -62,59 +52,131 @@ class ToDoFragment : Fragment() {
 
     private fun observeViewModel() {
 
-        viewModel.taskList.observe(viewLifecycleOwner) {taskList ->
-            binding.progressBar.isVisible = false
-            listEmpty(taskList)
-            taskListAdapter.submitList(taskList)
-
-        }
-
-        viewModel.taskInsert.observe(viewLifecycleOwner) {newTask ->
-            if (newTask.status == Status.TODO) {
-                val oldList = taskListAdapter.currentList
-
-                val newList = oldList.toMutableList().apply {
-                    add(0, newTask)
+        viewModel.taskList.observe(viewLifecycleOwner) { stateView ->
+            when (stateView) {
+                is StateView.OnLoading -> {
+                    binding.progressBar.isVisible = true
                 }
-                taskListAdapter.submitList(newList)
-                setPositionRecyclerView()
-            }
-        }
+                is StateView.OnSuccess -> {
+                    binding.progressBar.isVisible = false
 
-        viewModel.taskUpdate.observe(viewLifecycleOwner) { updatedTask ->
-            val oldList = taskListAdapter.currentList
+                    val taskList = stateView.data?.filter { it.status == Status.TODO }
 
-            val newList = oldList.toMutableList().apply {
-                if (updatedTask.status == Status.TODO) {
-                    find { it.id == updatedTask.id }?.description = updatedTask.description }
-                else {
-                    remove(updatedTask)
+                    listEmpty(taskList ?: emptyList())
+                    taskListAdapter.submitList(taskList)
+                }
+                else -> {
+                    binding.progressBar.isVisible = false
+                    Toast.makeText(
+                        requireContext(),
+                        stateView.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
-            val position = newList.indexOfFirst { it.id == updatedTask.id }
-
-            taskListAdapter.submitList(newList)
-            taskListAdapter.notifyItemChanged(position)
 
         }
 
-        viewModel.taskDelete.observe(viewLifecycleOwner) {deleteTask ->
-            val oldList = taskListAdapter.currentList
+        viewModel.taskInsert.observe(viewLifecycleOwner) {stateView ->
+            when (stateView) {
+                is StateView.OnLoading -> {
+                    binding.progressBar.isVisible = true
+                }
+                is StateView.OnSuccess -> {
+                    binding.progressBar.isVisible = false
+                    if (stateView.data?.status == Status.TODO) {
+                        val oldList = taskListAdapter.currentList
 
-            val newList = oldList.toMutableList().apply {
-                remove(deleteTask)
+                        val newList = oldList.toMutableList().apply {
+                            add(0, stateView.data)
+                        }
+                        taskListAdapter.submitList(newList)
+                        setPositionRecyclerView()
+                    }
+                }
+                else -> {
+                    binding.progressBar.isVisible = false
+                    Toast.makeText(
+                        requireContext(),
+                        stateView.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
 
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.task_deleted_successfully),
-                Toast.LENGTH_SHORT
-            ).show()
+        }
 
-            taskListAdapter.submitList(newList)
+        viewModel.taskUpdate.observe(viewLifecycleOwner) { stateView ->
+            when (stateView) {
+                is StateView.OnLoading -> {
+                    binding.progressBar.isVisible = true
+                }
+                is StateView.OnSuccess -> {
+                    binding.progressBar.isVisible = false
+                    val oldList = taskListAdapter.currentList
+
+                    val newList = oldList.toMutableList().apply {
+                        if (!oldList.contains(stateView.data) && stateView.data?.status == Status.TODO) {
+                            add(0, stateView.data)
+                            setPositionRecyclerView()
+                        }
+                        if (stateView.data?.status == Status.TODO) {
+                            find { it.id == stateView.data.id }?.description = stateView.data.description }
+                         else {
+                            remove(stateView.data)
+                        }
+                    }
+
+                    val position = newList.indexOfFirst { it.id == stateView.data?.id }
+                    listEmpty(newList)
+                    taskListAdapter.submitList(newList)
+                    taskListAdapter.notifyItemChanged(position)
+                }
+                else -> {
+                    binding.progressBar.isVisible = false
+                    Toast.makeText(
+                        requireContext(),
+                        stateView.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
 
         }
+
+        viewModel.taskDelete.observe(viewLifecycleOwner) {stateView ->
+            when (stateView) {
+                is StateView.OnLoading -> {
+                    binding.progressBar.isVisible = true
+                }
+                is StateView.OnSuccess -> {
+                    binding.progressBar.isVisible = false
+                    val oldList = taskListAdapter.currentList
+                    val newList = oldList.toMutableList().apply {
+                        remove(stateView.data)
+                    }
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.task_deleted_successfully),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    listEmpty(newList)
+                    taskListAdapter.submitList(newList)
+
+                }
+                else -> {
+                    binding.progressBar.isVisible = false
+                    Toast.makeText(
+                        requireContext(),
+                        stateView.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+        }
+
     }
 
     private fun initRecyclerView() {
@@ -166,7 +228,6 @@ class ToDoFragment : Fragment() {
             ""
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
