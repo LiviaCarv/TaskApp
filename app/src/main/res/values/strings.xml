@@ -52,7 +52,7 @@
     <string name="provide_a_password">Provide a password.</string>
     <string name="enter_your_e_mail">Enter your e-mail</string>
     <string name="enter_your_password">Enter your password</string>
-    <string name="remove">Remove</string>
+    <string name="remove">Delete</string>
     <string name="edit">Edit</string>
     <string name="details">Details</string>
     <string name="text_message_recover_fragment">Done, we\'ve sent you an email with information to recover your account.</string>

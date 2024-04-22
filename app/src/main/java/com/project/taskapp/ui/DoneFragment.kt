@@ -90,6 +90,7 @@ class DoneFragment : Fragment() {
                         val newList = oldList.toMutableList().apply {
                             add(0, stateView.data)
                         }
+                        listEmpty(newList)
                         taskListAdapter.submitList(newList)
                         setPositionRecyclerView()
                     }

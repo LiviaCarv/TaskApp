@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     style="@style/EditTextTheme"
                     android:hint="@string/enter_your_password"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
