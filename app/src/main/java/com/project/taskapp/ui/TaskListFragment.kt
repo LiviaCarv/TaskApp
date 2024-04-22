@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.project.taskapp.R
 import com.project.taskapp.data.model.Status
 import com.project.taskapp.data.model.Task
-import com.project.taskapp.databinding.FragmentToDoBinding
+import com.project.taskapp.databinding.FragmentTaskListBinding
 import com.project.taskapp.ui.adapter.TaskListAdapter
 import com.project.taskapp.util.StateView
 import com.project.taskapp.util.showBottomSheet
 
-class ToDoFragment : Fragment() {
-    private var _binding: FragmentToDoBinding? = null
+class TaskListFragment : Fragment() {
+    private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
     private lateinit var taskListAdapter: TaskListAdapter
     private val viewModel: TaskViewModel by activityViewModels()
@@ -29,7 +29,7 @@ class ToDoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentToDoBinding.inflate(inflater, container, false)
+        _binding = FragmentTaskListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -45,7 +45,7 @@ class ToDoFragment : Fragment() {
 
     private fun initListener() {
         binding.fabAddTask.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToFormTaskFragment(null))
+            findNavController().navigate(TaskListFragmentDirections.actionTaskListFragmentToFormTaskFragment(null))
         }
 
     }
@@ -182,7 +182,7 @@ class ToDoFragment : Fragment() {
 
     private fun initRecyclerView() {
 
-        taskListAdapter = TaskListAdapter( requireContext()) { taskItem, option ->
+        taskListAdapter = TaskListAdapter { taskItem, option ->
             optionSelected(taskItem, option)
         }
         binding.recyclerTaskList.apply {
@@ -201,14 +201,11 @@ class ToDoFragment : Fragment() {
                     viewModel.deleteTask(task)
                 })
             R.id.btn_edit_task -> {
-                val action = HomeFragmentDirections.actionHomeFragmentToFormTaskFragment(task)
+                val action = TaskListFragmentDirections.actionTaskListFragmentToFormTaskFragment(task)
                 findNavController().navigate(action)
             }
             R.id.btn_task_details -> {Toast.makeText(requireContext(), "details task ${task.description}", Toast.LENGTH_SHORT).show()}
-            R.id.btn_forward -> {
-                task.status = Status.DOING
-                viewModel.updateTask(task)
-            }
+
         }
     }
 

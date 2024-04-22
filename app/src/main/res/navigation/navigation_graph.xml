@@ -11,58 +11,9 @@
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
-            android:id="@+id/action_splashFragment_to_authentication"
-            app:destination="@id/authentication"
+            android:id="@+id/action_splashFragment_to_taskListFragment"
+            app:destination="@id/taskListFragment"
             app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true"/>
-        <action
-            android:id="@+id/action_splashFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true"/>
-    </fragment>
-    <navigation android:id="@+id/authentication"
-        app:startDestination="@id/loginFragment">
-        <fragment
-            android:id="@+id/registerFragment"
-            android:name="com.project.taskapp.ui.auth.RegisterFragment"
-            android:label="fragment_register"
-            tools:layout="@layout/fragment_register" />
-        <fragment
-            android:id="@+id/recoverAccountFragment"
-            android:name="com.project.taskapp.ui.auth.RecoverAccountFragment"
-            android:label="fragment_recover_account"
-            tools:layout="@layout/fragment_recover_account" />
-        <fragment
-            android:id="@+id/loginFragment"
-            android:name="com.project.taskapp.ui.auth.LoginFragment"
-            android:label="fragment_login"
-            tools:layout="@layout/fragment_login">
-            <action
-                android:id="@+id/action_loginFragment_to_recoverAccountFragment"
-                app:destination="@id/recoverAccountFragment" />
-            <action
-                android:id="@+id/action_loginFragment_to_registerFragment"
-                app:destination="@id/registerFragment" />
-        </fragment>
-        <action
-            android:id="@+id/action_global_homeFragment"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"/>
-    </navigation>
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.project.taskapp.ui.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_homeFragment_to_formTaskFragment"
-            app:destination="@id/formTaskFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_authentication"
-            app:destination="@id/authentication"
-            app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true"/>
     </fragment>
     <fragment
@@ -74,5 +25,14 @@
             android:name="task"
             app:argType="com.project.taskapp.data.model.Task"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskListFragment"
+        android:name="com.project.taskapp.ui.TaskListFragment"
+        android:label="fragment_task_list"
+        tools:layout="@layout/fragment_task_list" >
+        <action
+            android:id="@+id/action_taskListFragment_to_formTaskFragment"
+            app:destination="@id/formTaskFragment" />
     </fragment>
 </navigation>

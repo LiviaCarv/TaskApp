@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
-    id("com.google.gms.google-services")
     id("androidx.navigation.safeargs.kotlin")
 
 }
@@ -52,15 +51,6 @@ dependencies {
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-
-    // Import the Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:29.2.1"))
-
-    // Import the Firebase Authentication library
-    implementation("com.google.firebase:firebase-auth-ktx")
-
-    // Import the Realtime Database library
-    implementation("com.google.firebase:firebase-database-ktx")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
