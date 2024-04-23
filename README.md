@@ -24,6 +24,6 @@ Part 1 | Part 2
 :-: | :-:
 <video src='https://github.com/LiviaCarv/TaskApp/assets/112710454/da75428f-fc96-45fd-a141-85b56aeb5fd8' width=180/> | <video src='https://github.com/LiviaCarv/TaskApp/assets/112710454/15f1811c-f392-4f2f-886e-8b33e7ae7830' width=180/>
 
-If you have any questions or suggestions, don't hesitate to reach out. Thank you for checking out the "Organic Outlet" app! :smile: :rocket:
+If you have any questions or suggestions, don't hesitate to reach out. Thank you for checking out the "Task App" app! :smile: :rocket:
 
 
