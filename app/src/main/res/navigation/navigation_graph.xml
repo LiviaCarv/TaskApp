@@ -23,7 +23,7 @@
         tools:layout="@layout/fragment_form_task" >
         <argument
             android:name="task"
-            app:argType="com.project.taskapp.data.model.Task"
+            app:argType="com.project.taskapp.data.database.Task"
             app:nullable="true" />
     </fragment>
     <fragment
