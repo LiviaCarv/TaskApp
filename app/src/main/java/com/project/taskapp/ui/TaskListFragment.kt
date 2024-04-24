@@ -8,11 +8,14 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.project.taskapp.R
 import com.project.taskapp.data.model.Status
-import com.project.taskapp.data.model.Task
+import com.project.taskapp.data.database.Task
+import com.project.taskapp.data.database.TaskDatabase
+import com.project.taskapp.data.database.TaskRepository
 import com.project.taskapp.databinding.FragmentTaskListBinding
 import com.project.taskapp.ui.adapter.TaskListAdapter
 import com.project.taskapp.util.StateView
@@ -22,7 +25,7 @@ class TaskListFragment : Fragment() {
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
     private lateinit var taskListAdapter: TaskListAdapter
-    private val viewModel: TaskViewModel by activityViewModels()
+    private lateinit var viewModel: TaskViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +33,12 @@ class TaskListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentTaskListBinding.inflate(inflater, container, false)
+
+        val dataSource = TaskDatabase.getDatabase(requireContext()).taskDao()
+        val repository = TaskRepository(dataSource)
+        val viewModelFactory = TaskViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[TaskViewModel::class.java]
+
         return binding.root
     }
 
@@ -52,131 +61,6 @@ class TaskListFragment : Fragment() {
 
     private fun observeViewModel() {
 
-        viewModel.taskList.observe(viewLifecycleOwner) { stateView ->
-            when (stateView) {
-                is StateView.OnLoading -> {
-                    binding.progressBar.isVisible = true
-                }
-                is StateView.OnSuccess -> {
-                    binding.progressBar.isVisible = false
-
-                    val taskList = stateView.data?.filter { it.status == Status.TODO }
-
-                    listEmpty(taskList ?: emptyList())
-                    taskListAdapter.submitList(taskList)
-                }
-                else -> {
-                    binding.progressBar.isVisible = false
-                    Toast.makeText(
-                        requireContext(),
-                        stateView.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-
-        }
-
-        viewModel.taskInsert.observe(viewLifecycleOwner) {stateView ->
-            when (stateView) {
-                is StateView.OnLoading -> {
-                    binding.progressBar.isVisible = true
-                }
-                is StateView.OnSuccess -> {
-                    binding.progressBar.isVisible = false
-                    if (stateView.data?.status == Status.TODO) {
-                        val oldList = taskListAdapter.currentList
-
-                        val newList = oldList.toMutableList().apply {
-                            add(0, stateView.data)
-                        }
-                        listEmpty(newList)
-                        taskListAdapter.submitList(newList)
-                        setPositionRecyclerView()
-                    }
-                }
-                else -> {
-                    binding.progressBar.isVisible = false
-                    Toast.makeText(
-                        requireContext(),
-                        stateView.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-        }
-
-        viewModel.taskUpdate.observe(viewLifecycleOwner) { stateView ->
-            when (stateView) {
-                is StateView.OnLoading -> {
-                    binding.progressBar.isVisible = true
-                }
-                is StateView.OnSuccess -> {
-                    binding.progressBar.isVisible = false
-                    val oldList = taskListAdapter.currentList
-
-                    val newList = oldList.toMutableList().apply {
-                        if (!oldList.contains(stateView.data) && stateView.data?.status == Status.TODO) {
-                            add(0, stateView.data)
-                            setPositionRecyclerView()
-                        }
-                        if (stateView.data?.status == Status.TODO) {
-                            find { it.id == stateView.data.id }?.description = stateView.data.description }
-                         else {
-                            remove(stateView.data)
-                        }
-                    }
-
-                    val position = newList.indexOfFirst { it.id == stateView.data?.id }
-                    listEmpty(newList)
-                    taskListAdapter.submitList(newList)
-                    taskListAdapter.notifyItemChanged(position)
-                }
-                else -> {
-                    binding.progressBar.isVisible = false
-                    Toast.makeText(
-                        requireContext(),
-                        stateView.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-        }
-
-        viewModel.taskDelete.observe(viewLifecycleOwner) {stateView ->
-            when (stateView) {
-                is StateView.OnLoading -> {
-                    binding.progressBar.isVisible = true
-                }
-                is StateView.OnSuccess -> {
-                    binding.progressBar.isVisible = false
-                    val oldList = taskListAdapter.currentList
-                    val newList = oldList.toMutableList().apply {
-                        remove(stateView.data)
-                    }
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.task_deleted_successfully),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    listEmpty(newList)
-                    taskListAdapter.submitList(newList)
-
-                }
-                else -> {
-                    binding.progressBar.isVisible = false
-                    Toast.makeText(
-                        requireContext(),
-                        stateView.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-        }
 
     }
 

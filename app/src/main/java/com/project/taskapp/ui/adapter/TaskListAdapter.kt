@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.project.taskapp.R
-import com.project.taskapp.data.model.Task
+import com.project.taskapp.data.database.Task
 import com.project.taskapp.databinding.ItemTaskBinding
 
 class TaskListAdapter(

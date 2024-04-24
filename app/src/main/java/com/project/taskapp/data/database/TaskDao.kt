@@ -9,7 +9,6 @@ import androidx.room.Update
 
 @Dao
 interface TaskDao {
-
     @Query("SELECT * FROM tasks_table ORDER BY id DESC")
     suspend fun getAllTasks(): List<Task>
 
@@ -21,6 +20,5 @@ interface TaskDao {
 
     @Update
     suspend fun updateTask(task: Task)
-
 
 }

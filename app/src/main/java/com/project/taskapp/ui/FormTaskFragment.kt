@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.project.taskapp.R
 import com.project.taskapp.data.model.Status
-import com.project.taskapp.data.model.Task
+import com.project.taskapp.data.database.Task
+import com.project.taskapp.data.database.TaskDatabase
+import com.project.taskapp.data.database.TaskRepository
 import com.project.taskapp.databinding.FragmentFormTaskBinding
 import com.project.taskapp.util.initToolBar
 import com.project.taskapp.util.showBottomSheet
@@ -25,13 +28,20 @@ class FormTaskFragment : BaseFragment() {
     private var status: Status = Status.TODO
 
     private val args: FormTaskFragmentArgs by navArgs()
-    private val viewModel: TaskViewModel by activityViewModels()
+    private lateinit var viewModel: TaskViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFormTaskBinding.inflate(inflater, container, false)
+
+
+        val dataSource = TaskDatabase.getDatabase(requireContext()).taskDao()
+        val repository = TaskRepository(dataSource)
+        val viewModelFactory = TaskViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(TaskViewModel::class.java)
+
         return binding.root
     }
 
@@ -89,13 +99,10 @@ class FormTaskFragment : BaseFragment() {
         if (description.isNotEmpty()) {
             hideKeyboard()
             binding.progressBar.isVisible = true
-            if (newTask) task = Task()
-            task.description = description
-            task.status = status
             if (newTask) {
-                viewModel.saveTask(task)
+                viewModel.insertOrUpdateTask(description=description, status = status)
             } else {
-                viewModel.updateTask(task)
+                viewModel.insertOrUpdateTask(id = task.id, description=description, status = status)
             }
         } else {
             showBottomSheet(message = getString(R.string.provide_task_description))
@@ -103,16 +110,20 @@ class FormTaskFragment : BaseFragment() {
 
     }
     private fun observeViewModel() {
-        viewModel.taskUpdate.observe(viewLifecycleOwner) { _ ->
+        viewModel.taskStateMessage.observe(viewLifecycleOwner) { message ->
             Toast.makeText(
                 requireContext(),
-                getString(R.string.task_updated_successfully), Toast.LENGTH_SHORT
+                getString(message),
+                Toast.LENGTH_SHORT
             ).show()
             binding.progressBar.isVisible = false
         }
 
 
-        viewModel.taskInsert.observe(viewLifecycleOwner) { _ ->
+        viewModel.taskStateData.observe(viewLifecycleOwner) { stateTask ->
+            if (stateTask == StateTask.Inserted || stateTask == StateTask.Updated) {
+                findNavController().popBackStack()
+            }
             Toast.makeText(
                         requireContext(),
                         getString(R.string.task_saved_successfully), Toast.LENGTH_SHORT
