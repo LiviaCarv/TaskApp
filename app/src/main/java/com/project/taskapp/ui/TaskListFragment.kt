@@ -25,7 +25,7 @@ class TaskListFragment : Fragment() {
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
     private lateinit var taskListAdapter: TaskListAdapter
-    private lateinit var viewModel: TaskViewModel
+    private lateinit var viewModel: TaskListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +36,8 @@ class TaskListFragment : Fragment() {
 
         val dataSource = TaskDatabase.getDatabase(requireContext()).taskDao()
         val repository = TaskRepository(dataSource)
-        val viewModelFactory = TaskViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory)[TaskViewModel::class.java]
+        val viewModelFactory = TaskListViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[TaskListViewModel::class.java]
 
         return binding.root
     }
@@ -48,8 +48,11 @@ class TaskListFragment : Fragment() {
         initListener()
         initRecyclerView()
         observeViewModel()
-        viewModel.getTaskList()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getTaskList()
     }
 
     private fun initListener() {
@@ -60,12 +63,18 @@ class TaskListFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        viewModel.taskList.observe(viewLifecycleOwner) { taskList ->
+            taskListAdapter.submitList(taskList)
+            listEmpty(taskList)
+        }
 
+        viewModel.taskStateData.observe(viewLifecycleOwner) { stateData ->
+           viewModel.getTaskList()
+        }
 
     }
 
     private fun initRecyclerView() {
-
         taskListAdapter = TaskListAdapter { taskItem, option ->
             optionSelected(taskItem, option)
         }
@@ -93,15 +102,6 @@ class TaskListFragment : Fragment() {
         }
     }
 
-    private fun setPositionRecyclerView() {
-        taskListAdapter.registerAdapterDataObserver(object: RecyclerView.AdapterDataObserver() {
-
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                binding.recyclerTaskList.scrollToPosition(0)
-            }
-
-        })
-    }
 
     private fun listEmpty(taskList: List<Task>) {
         binding.txtInfo.text = if (taskList.isEmpty()) {
@@ -109,6 +109,7 @@ class TaskListFragment : Fragment() {
         } else  {
             ""
         }
+        binding.progressBar.isVisible = false
     }
 
     override fun onDestroyView() {

@@ -107,6 +107,7 @@ class FormTaskFragment : BaseFragment() {
         } else {
             showBottomSheet(message = getString(R.string.provide_task_description))
         }
+        findNavController().popBackStack()
 
     }
     private fun observeViewModel() {
@@ -124,11 +125,7 @@ class FormTaskFragment : BaseFragment() {
             if (stateTask == StateTask.Inserted || stateTask == StateTask.Updated) {
                 findNavController().popBackStack()
             }
-            Toast.makeText(
-                        requireContext(),
-                        getString(R.string.task_saved_successfully), Toast.LENGTH_SHORT
-                    ).show()
-            findNavController().popBackStack()
+
         }
 
     }

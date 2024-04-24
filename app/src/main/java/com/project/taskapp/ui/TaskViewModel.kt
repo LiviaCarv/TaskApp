@@ -27,9 +27,6 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
             }
         }
 
-    fun getTaskList() = viewModelScope.launch {
-        repository.getAllTasks()
-    }
 
     private fun insertTask(task: Task) = viewModelScope.launch {
         try {
@@ -43,12 +40,17 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
     }
 
     private fun updateTask(task: Task) = viewModelScope.launch {
-        repository.updateTask(task)
+        try {
+            repository.updateTask(task)
+            _taskStateData.postValue(StateTask.Updated)
+            _taskStateMessage.postValue(R.string.task_saved_successfully)
+
+        } catch (exception: Exception) {
+            _taskStateMessage.postValue(R.string.error_generic)
+        }
     }
 
-    fun deleteTask(task: Task) = viewModelScope.launch {
-        repository.deleteTask(task)
-    }
+
 }
 
 class TaskViewModelFactory(private val repository: TaskRepository) : ViewModelProvider.Factory {
@@ -66,6 +68,5 @@ sealed class StateTask{
     object Inserted: StateTask()
     object Updated: StateTask()
     object Deleted: StateTask()
-    object List: StateTask()
 
 }
